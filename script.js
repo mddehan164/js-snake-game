@@ -24,9 +24,70 @@ const snake = [
   { row: 5, col: 7 },
 ];
 
-function renderSnake() {
-  snake.forEach((seg) =>
-    blocks[`${seg.row},${seg.col}`].classList.add("snake")
-  );
+function snakeBody(task) {
+  if (task) {
+    snake.forEach((seg) =>
+      blocks[`${seg.row},${seg.col}`].classList.add("snake")
+    );
+  } else {
+    document
+      .querySelectorAll(".snake")
+      .forEach((b) => b.classList.remove("snake"));
+  }
 }
-renderSnake();
+snakeBody(true);
+
+// moving logic
+
+let direction = "down";
+
+const move = () => {
+  let head = null;
+
+  switch (direction) {
+    case "left":
+      head = { row: snake[0].row, col: snake[0].col - 1 };
+      break;
+    case "right":
+      head = { row: snake[0].row, col: snake[0].col + 1 };
+      break;
+    case "up":
+      head = { row: snake[0].row - 1, col: snake[0].col };
+      break;
+    case "down":
+      head = { row: snake[0].row + 1, col: snake[0].col };
+      break;
+  }
+
+  //update snake
+  snake.unshift(head);
+  snake.pop();
+  if (head.row >= rows || head.col >= cols) {
+    alert("Game Over");
+  }
+  // clear previous blocks
+  snakeBody(false);
+  // re-render snake
+  snakeBody(true);
+};
+
+// const interval = setInterval(move, 800);
+
+// direction setting logic
+
+addEventListener("keydown", (e) => {
+  switch (e.key) {
+    case "ArrowUp":
+      direction = "up";
+      break;
+    case "ArrowDown":
+      direction = "down";
+      break;
+    case "ArrowRight":
+      direction = "right";
+      break;
+    case "ArrowLeft":
+      direction = "left";
+      break;
+  }
+});
