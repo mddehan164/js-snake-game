@@ -62,8 +62,20 @@ const move = () => {
   //update snake
   snake.unshift(head);
   snake.pop();
-  if (head.row >= rows || head.col >= cols) {
+  if (head.row >= rows || head.col >= cols || head.row <= 0 || head.col <= 0) {
     alert("Game Over");
+    clearInterval(interval);
+  }
+
+  // food consuming logic
+  if (head.row === food.row && head.col === food.col) {
+    blocks[`${food.row},${food.col}`].classList.remove("food");
+    snake.unshift(head);
+    food = {
+      row: Math.floor(Math.random() * rows),
+      col: Math.floor(Math.random() * cols),
+    };
+    blocks[`${food.row},${food.col}`].classList.add("food");
   }
   // clear previous blocks
   snakeBody(false);
@@ -71,7 +83,7 @@ const move = () => {
   snakeBody(true);
 };
 
-// const interval = setInterval(move, 800);
+const interval = setInterval(move, 400);
 
 // direction setting logic
 
@@ -91,3 +103,12 @@ addEventListener("keydown", (e) => {
       break;
   }
 });
+
+// food render logic
+
+let food = {
+  row: Math.floor(Math.random() * rows),
+  col: Math.floor(Math.random() * cols),
+};
+
+blocks[`${food.row},${food.col}`].classList.add("food");
