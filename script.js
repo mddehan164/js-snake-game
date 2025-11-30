@@ -18,7 +18,7 @@ for (let row = 0; row < rows; row++) {
 
 // render the snake
 
-const snake = [
+let snake = [
   { row: 5, col: 5 },
   { row: 5, col: 6 },
   { row: 5, col: 7 },
@@ -39,7 +39,7 @@ snakeBody(true);
 
 // moving logic
 
-let direction = "down";
+let direction = "left";
 
 const move = () => {
   let head = null;
@@ -62,28 +62,18 @@ const move = () => {
   //update snake
   snake.unshift(head);
   snake.pop();
-  if (head.row >= rows || head.col >= cols || head.row <= 0 || head.col <= 0) {
-    alert("Game Over");
-    clearInterval(interval);
-  }
 
+  // wall hit logic
+  gameover(head);
   // food consuming logic
-  if (head.row === food.row && head.col === food.col) {
-    blocks[`${food.row},${food.col}`].classList.remove("food");
-    snake.unshift(head);
-    food = {
-      row: Math.floor(Math.random() * rows),
-      col: Math.floor(Math.random() * cols),
-    };
-    blocks[`${food.row},${food.col}`].classList.add("food");
-  }
+  renderFood(head);
   // clear previous blocks
   snakeBody(false);
   // re-render snake
   snakeBody(true);
 };
 
-const interval = setInterval(move, 400);
+let interval = null;
 
 // direction setting logic
 
@@ -112,3 +102,57 @@ let food = {
 };
 
 blocks[`${food.row},${food.col}`].classList.add("food");
+
+const renderFood = (head) => {
+  if (head.row === food.row && head.col === food.col) {
+    blocks[`${food.row},${food.col}`].classList.remove("food");
+    snake.unshift(head);
+    food = {
+      row: Math.floor(Math.random() * rows),
+      col: Math.floor(Math.random() * cols),
+    };
+    blocks[`${food.row},${food.col}`].classList.add("food");
+  }
+};
+
+// wall hit logic
+const gameover = (head) => {
+  if (head.row >= rows || head.col >= cols || head.row <= 0 || head.col <= 0) {
+    const notice = document.getElementById("notice");
+    notice.classList.toggle("vanish");
+    startBtn.innerHTML = "Restart";
+    setTimeout(() => {
+      notice.classList.toggle("vanish");
+    }, 3000);
+    setTimeout(() => {
+      modal.classList.toggle("vanish");
+    }, 3050);
+    clearInterval(interval);
+    snakeBody(false);
+    restartgame();
+    snakeBody(true);
+  }
+};
+
+// start button logic
+
+const startBtn = document.querySelector(".start_btn");
+const modal = document.getElementById("modal");
+
+startBtn.addEventListener("click", () => {
+  modal.classList.add("vanish");
+  interval = setInterval(move, 400);
+});
+
+// restart logic
+
+const restartgame = () => {
+  setTimeout(() => {
+    snake = [
+      { row: 5, col: 5 },
+      { row: 5, col: 6 },
+      { row: 5, col: 7 },
+    ];
+  }, 3100);
+  direction = "left";
+};

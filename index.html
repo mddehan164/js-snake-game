@@ -8,20 +8,35 @@
   </head>
   <body>
     <main class="container">
-      <section class="info">
+      <section id="restart_modal">
+          <p>
+          Press Enter
+          or Restart to <b class="start">Restart</b></b>
+        </p>
+        <button class="start_btn" id="restart_btn">Restart</button>
+      </section>
+      <div class="info">
         <h3 class="info-child">
           High Score - <span class="high-score">0</span>
         </h3>
-        <h3 class="info-child">Score - <span class="score">0</span></h3>
+        <h3 class="info-child">Score - <span id="score">0</span></h3>
         <h3 class="info-child">Time - <span class="time">00-00-00</span></h3>
-      </section>
+      </div>
       <section id="modal">
-        <p>
+        <div id="functions">
+          <p>
           Press Enter
-          <b>(If with key board) or start to <b class="start">Start</b></b>
+          or start to <b class="start">Start</b></b>
         </p>
-        <button class="start_btn">Start</button>
+        <button class="start_btn" id="start_btn">Start</button>
+        </div>
       </section>
+      <section id="notice" class="vanish">
+        <div>
+          <h1>Game Over</h1>
+        </div>
+      </section>
+
       <section id="board" class="board"></section>
     </main>
     <script src="./script.js"></script>
