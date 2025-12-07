@@ -19,9 +19,9 @@ for (let row = 0; row < rows; row++) {
 // render the snake
 
 let snake = [
-  { row: 5, col: 5 },
   { row: 5, col: 6 },
   { row: 5, col: 7 },
+  { row: 5, col: 8 },
 ];
 
 function snakeBody(task) {
@@ -39,7 +39,7 @@ snakeBody(true);
 
 // moving logic
 
-let direction = "left";
+let direction = "right";
 
 const move = () => {
   let head = null;
@@ -94,7 +94,17 @@ addEventListener("keydown", (e) => {
   }
 });
 
-// food render logic
+// food render and score logic
+
+let [score, highScore, time] = [
+  0,
+  localStorage.getItem("highScore") || 0,
+  "00:00:00",
+];
+const scoreBoard = document.getElementById("score");
+const highScoreBoard = document.getElementById("high_score");
+const timeBoard = document.getElementById("time");
+highScoreBoard.innerText = highScore;
 
 let food = {
   row: Math.floor(Math.random() * rows),
@@ -112,32 +122,39 @@ const renderFood = (head) => {
       col: Math.floor(Math.random() * cols),
     };
     blocks[`${food.row},${food.col}`].classList.add("food");
+    score += 10;
+    scoreBoard.innerText = score;
+    if (score > highScore) {
+      localStorage.setItem("highScore", score);
+      highScore = localStorage.getItem("highScore");
+      highScoreBoard.innerText = highScore;
+    }
   }
 };
+
+// time logic
 
 // wall hit logic
 const gameover = (head) => {
   if (head.row >= rows || head.col >= cols || head.row <= 0 || head.col <= 0) {
     const notice = document.getElementById("notice");
     notice.classList.toggle("vanish");
-    startBtn.innerHTML = "Restart";
     setTimeout(() => {
       notice.classList.toggle("vanish");
     }, 3000);
     setTimeout(() => {
-      modal.classList.toggle("vanish");
+      backdrop.classList.toggle("vanish");
+      restartModal.style.display = "flex";
     }, 3050);
     clearInterval(interval);
-    snakeBody(false);
-    restartgame();
-    snakeBody(true);
   }
 };
 
 // start button logic
 
-const startBtn = document.querySelector(".start_btn");
+const startBtn = document.querySelector("#start_btn");
 const modal = document.getElementById("modal");
+const backdrop = document.getElementById("backdrop");
 
 startBtn.addEventListener("click", () => {
   modal.classList.add("vanish");
@@ -145,14 +162,25 @@ startBtn.addEventListener("click", () => {
 });
 
 // restart logic
+const restartBtn = document.querySelector("#restart_btn");
+const restartModal = document.getElementById("restart_modal");
 
 const restartgame = () => {
-  setTimeout(() => {
-    snake = [
-      { row: 5, col: 5 },
-      { row: 5, col: 6 },
-      { row: 5, col: 7 },
-    ];
-  }, 3100);
-  direction = "left";
+  snake = [
+    { row: 5, col: 5 },
+    { row: 5, col: 6 },
+    { row: 5, col: 7 },
+  ];
+  direction = "right";
+  restartModal.style.display = "none";
+  backdrop.classList.add("vanish");
+  interval = setInterval(move, 400);
+  score = 0;
+  scoreBoard.innerText = score;
 };
+
+restartBtn.addEventListener("click", restartgame);
+
+document.addEventListener("unload", () => {
+  clearInterval(interval);
+});

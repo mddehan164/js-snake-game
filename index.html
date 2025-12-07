@@ -8,7 +8,8 @@
   </head>
   <body>
     <main class="container">
-      <section id="restart_modal">
+      <div id="backdrop" class="backdrop vanish"></div>
+      <section id="restart_modal" class="vanish">
           <p>
           Press Enter
           or Restart to <b class="start">Restart</b></b>
@@ -17,10 +18,10 @@
       </section>
       <div class="info">
         <h3 class="info-child">
-          High Score - <span class="high-score">0</span>
+          High Score - <span id="high_score">0</span>
         </h3>
         <h3 class="info-child">Score - <span id="score">0</span></h3>
-        <h3 class="info-child">Time - <span class="time">00-00-00</span></h3>
+        <h3 class="info-child">Time - <span id="time"></span></h3>
       </div>
       <section id="modal">
         <div id="functions">

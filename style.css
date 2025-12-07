@@ -52,7 +52,8 @@ main {
   grid-template-rows: repeat(auto-fill, minmax(30px, 1fr));
 }
 .block {
-  border: 1px solid #333;
+  /* border: 1px solid #333; */
+  border-radius: 10%;
 }
 
 .snake {
@@ -112,6 +113,9 @@ main {
   height: 100%;
   background: rgba(12, 12, 12, 0.637);
   backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #functions {
   display: flex;
@@ -119,7 +123,6 @@ main {
   justify-content: center;
   align-items: center;
   gap: 15px;
-  margin-top: 30%;
 }
 
 #notice {
@@ -163,7 +166,7 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -174,4 +177,14 @@ main {
   backdrop-filter: blur(3px);
   border-radius: 1rem;
   box-shadow: 0 0 10px #6ddf70;
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-color: rgba(0, 0, 0, 0.473);
 }
